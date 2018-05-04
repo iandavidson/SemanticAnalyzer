@@ -1,0 +1,11 @@
+This Text file is a resource for project 3 it should have a token on the left side
+and the corresponding respective cpp include statement.
+
+Another Note: We will always put the "using namesapce std;" in our generated file
+	-> B/c strings need the std::, as well as iostream keywords.
+
+Token:										Include:
+
+(display ...)  	       	    =>   #include<iostream>
+(newline)		    						=>	 #include<iostream>
+<add more>

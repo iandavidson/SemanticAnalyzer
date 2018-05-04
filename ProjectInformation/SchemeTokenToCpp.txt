@@ -1,0 +1,7 @@
+This file will have information related to what token will roughly translate
+into for a cpp program.
+
+
+
+(display ...)  	       	    =>   cout << ...(interpretted);
+(newline)		    						=>	 cout << endl;  

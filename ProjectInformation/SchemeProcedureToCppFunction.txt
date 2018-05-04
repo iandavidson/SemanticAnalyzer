@@ -1,0 +1,2 @@
+This file will discuss how to translate a scheme procedure/funct to a
+cpp function.  
