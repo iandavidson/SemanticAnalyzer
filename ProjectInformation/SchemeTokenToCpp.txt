@@ -4,4 +4,34 @@ into for a cpp program.
 
 
 (display ...)  	       	    =>   cout << ...(interpretted);
-(newline)		    						=>	 cout << endl;  
+(newline)		    						=>	 cout << endl;
+
+
+(cond (cond1 w/ var n) do-shit1      =>  switch(variable){
+      (cond2 w/ var n) do-shit2      =>     case(cond1): do-shit1
+      (cond3 w/ var n) do-shit3      =>     case(cond2): do-shit2
+      (else else-do-shit)            =>     case(cond3): do-shit3
+      )                              =>     default: else-do-shit
+                                          }
+                          KeyPoints for cond:
+                          ~the "do-shit" peice of code needs a "break;" if it is not a return statement.
+                          ~the "do-shit" peice of code also needs to be interpretted. literally, like:
+                            (square n) => return square(n);
+
+
+
+(if (etc) <truecase> <elsecase>)    =>    if(){
+                                    =>       <truecase>
+                                    =>    }else{
+                                    =>       <else case>
+                                    =>    }
+//sidenote: we need to develop a strategy of translating what the scheme case ==>> cpp case
+
+
+
+(not(condition))                =>    (! <conditional>)
+
+
+Evaluating expressions
+pre -> infix
+(* n n)                     =>      (n * n)

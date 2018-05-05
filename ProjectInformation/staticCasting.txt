@@ -1,0 +1,37 @@
+This file is geared towards specifying what the static cast of Object class will return.
+
+Cast: then Usage:
+
+
+Int:
+	should return the int value of the instance called with
+
+Usage:
+	~Can be used for if were checking the predicates Number? & Zero?
+	~for casting in main to get correct value outputted
+	     ->meaning: cout << (int)(square((object)(16)) << endl; to get the
+	     -> the int value out of an object type returned from square call
+
+
+
+String: (specifically for error message like "invalid parameter")
+	should return the string value of the class instance
+
+Usage:
+	~can be used for predicates
+
+
+
+
+
+Fill these plz:
+
+
+Double:
+Usage:
+
+
+
+
+Bool:
+Usage:

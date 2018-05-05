@@ -1,2 +1,24 @@
 This file will discuss how to translate a scheme procedure/funct to a
-cpp function.  
+cpp function.
+
+
+scheme procedure example:
+(define (reciprocal n)
+	(if ( and ( number? n ) (not (= n 0)))
+			(/ 1 n)
+			‘Invalid_param
+		)
+	)
+
+
+
+Respective Cpp function:
+
+<prototype> Object reciprocal ( Object n);
+
+<funct declaration>
+Object reciprocal ( Object n)
+{
+	if(num.isTypeNum()  && (!num))
+
+}

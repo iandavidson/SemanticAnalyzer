@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class CodeGen 
+class CodeGen
 {
     public:
 	CodeGen (string filename, LexicalAnalyzer * L);
@@ -16,6 +16,13 @@ class CodeGen
     private:
 	LexicalAnalyzer * lex;
 	ofstream cpp;
+
+  /*
+  other data structures
+  container for prototypes
+
+  
+  */
 };
-	
+
 #endif
