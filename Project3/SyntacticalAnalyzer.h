@@ -14,6 +14,7 @@
 #include <fstream>
 #include <set>
 #include "LexicalAnalyzer.h"
+#include "CodeGenerator.h"
 
 using namespace std;
 
@@ -35,11 +36,6 @@ enum token_type {NONE = -1, LAMBDA, IDENT_T, NUMLIT_T, STRLIT_T, CONS_T, IF_T,
 
 
 */
-
-
-
-
-
 
 class SyntacticalAnalyzer 
 {
@@ -64,6 +60,9 @@ class SyntacticalAnalyzer
 	int stmt_pair_body();
 	int action();
 	int any_other_token();
+
+	CodeGen * codeGen;
+
 };
 	
 #endif

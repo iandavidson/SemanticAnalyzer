@@ -24,7 +24,7 @@ using namespace std;
 *              associated with the lexemes scanned from an input file.         *
 *******************************************************************************/
 
-enum token_type {NONE = -1, LAMBDA, IDENT_T, NUMLIT_T, STRLIT_T, CONS_T, IF_T,
+enum token_type {NON = -1, LAMBDA, IDENT_T, NUMLIT_T, STRLIT_T, CONS_T, IF_T,
 		 COND_T, DISPLAY_T, NEWLINE_T, LISTOP_T, AND_T, OR_T, NOT_T,
 		 DEFINE_T, NUMBERP_T, SYMBOLP_T, LISTP_T, ZEROP_T, NULLP_T,
 		 STRINGP_T, MODULO_T, ELSE_T, PLUS_T, MINUS_T, DIV_T, MULT_T,
@@ -38,7 +38,7 @@ enum token_type {NONE = -1, LAMBDA, IDENT_T, NUMLIT_T, STRLIT_T, CONS_T, IF_T,
 *              into lexemes and identify tokens associated with the lexemes.   *
 *******************************************************************************/
 
-class LexicalAnalyzer 
+class LexicalAnalyzer
 {
     public:
 	LexicalAnalyzer (char * filename);
@@ -60,5 +60,5 @@ class LexicalAnalyzer
 	int errors;
 	map <string, token_type> symbols;
 };
-	
+
 #endif

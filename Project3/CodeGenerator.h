@@ -5,6 +5,7 @@
 #include <fstream>
 #include "LexicalAnalyzer.h"
 
+
 using namespace std;
 
 class CodeGen
@@ -17,11 +18,13 @@ class CodeGen
 	LexicalAnalyzer * lex;
 	ofstream cpp;
 
+
+
   /*
   other data structures
   container for prototypes
 
-  
+
   */
 };
 
