@@ -6,6 +6,6 @@ Another Note: We will always put the "using namesapce std;" in our generated fil
 
 Token:										Include:
 
-(display ...)  	       	    =>   #include<iostream>
+(display ...)  	       	    				=>   #include<iostream>
 (newline)		    						=>	 #include<iostream>
 <add more>

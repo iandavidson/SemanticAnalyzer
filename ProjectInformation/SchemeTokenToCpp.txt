@@ -35,3 +35,7 @@ into for a cpp program.
 Evaluating expressions
 pre -> infix
 (* n n)                     =>      (n * n)
+
+
+(quote) 				literal instance of object using QUOTE_T token
+'abcd						=>		object = "abcd";

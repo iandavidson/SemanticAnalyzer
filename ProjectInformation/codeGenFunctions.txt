@@ -1,0 +1,8 @@
+startNewFunction(<name of funct>, <arguments?>) => when we see define token and some "(" format
+
+
+endOfFunction()			=> when we see some amount of closing parens
+
+writeStringLiteral()	=> when we see a "'information" quote then anyTokenFollowing, rule 79.
+
+translateExpression()	=> when we see some operation going on, translate then write to cpp file
