@@ -85,10 +85,12 @@ SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 {
 	lex = new LexicalAnalyzer (filename);
 	string name = filename;
-	string p2name = name.substr (0, name.length()-3) + ".p2"; 
+	string p2name = name.substr (0, name.length()-3) + ".p2";
 	p2file.open (p2name.c_str());// "./output/" + p2name.c_str()
 	token = lex->GetToken();
+	codeGen = new CodeGen(p2name, lex);
 	int errors = Program ();
+
 }
 
 /*******************************************************************************
@@ -134,18 +136,18 @@ int SyntacticalAnalyzer::Program ()
 
 
 	p2file << "Using Rule 1" << endl;
-	
+
 	if(token == LPAREN_T){
-	
+
 		errors += define ();
-		
+
 		errors += more_defines ();
-	
+
 	}else{
 
 		errors++;
 		lex->ReportError ("missing first opening paren at begining of program; found: " + lex->GetTokenName (token) );
-	
+
 	}
 
 	if (token != EOF_T)
@@ -178,7 +180,7 @@ int SyntacticalAnalyzer::Program ()
 int SyntacticalAnalyzer::define ()
 {
 
-	p2file << "Entering Define function; current token is: " << lex->GetTokenName(token) 
+	p2file << "Entering Define function; current token is: " << lex->GetTokenName(token)
 	<< ", lexeme: " << lex->GetLexeme() << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
@@ -193,13 +195,14 @@ int SyntacticalAnalyzer::define ()
 		itr1 = define_firsts.find(token);
 		itr2 = define_follows.find(token);
 	}
-
 	//do specific rule related procedure
 
 	//rule 2 <def> => LPAREN_T, DEFINE_T LPAREN_T IDENT_T <param_list> RPAREN_T <stmt> <stmt_list> RPAREN_T
 	p2file << "Using Rule 2" << endl;
 	if(token == LPAREN_T){
 		token = lex->GetToken();
+		codeGen->WriteCode(0 , lex->GetLexeme());
+
 	}else{
 		errors++;
 		lex->ReportError("expecting first LPAREN_T at middle of define, found: "  + lex->GetTokenName (token));
@@ -207,6 +210,8 @@ int SyntacticalAnalyzer::define ()
 
 	if(token == DEFINE_T){
 		token = lex->GetToken();
+		codeGen->WriteCode(0 , lex->GetLexeme());
+
 	}else{
 		errors++;
 		lex->ReportError("expecting first DEFINE_T at middle of define, found: "  + lex->GetTokenName (token));
@@ -215,15 +220,19 @@ int SyntacticalAnalyzer::define ()
 
 	if(token == LPAREN_T){
 		token = lex->GetToken();
+		codeGen->WriteCode(0 , lex->GetLexeme());
+
 	}else{
 		errors++;
 		lex->ReportError("expecting second LPAREN_T at begining of define, found: "  + lex->GetTokenName (token));
-	}	
+	}
 
-	
+
 	if(token == IDENT_T){
 
 		token = lex->GetToken();
+		codeGen->WriteCode(0 , lex->GetLexeme());
+
 	}else{
 		errors++;
 		lex->ReportError("expecting first IDENT_T, found: " + lex->GetTokenName(token));
@@ -296,7 +305,7 @@ int SyntacticalAnalyzer::more_defines ()
 	//do specific rule related procedure
 
 	if (token == LPAREN_T){ //first of define
-		
+
 
 		//fosho rule 3
 		p2file << "Using Rule 3" << endl;
@@ -306,7 +315,7 @@ int SyntacticalAnalyzer::more_defines ()
 
 
 
-	}else if (token == EOF_T){    //follows of more_defines 
+	}else if (token == EOF_T){    //follows of more_defines
 		//being the lambda definition
 		//do nothing we coo
 		p2file << "Using Rule 4" << endl;
@@ -336,10 +345,10 @@ int SyntacticalAnalyzer::stmt_list ()
 /*
 	5. <stmt_list> -> <stmt> <stmt_list>
 	6. <stmt_list> -> λ
-	
+
 */
 
-p2file << "Entering Stmt_List function; current token is: " << lex->GetTokenName(token) << 
+p2file << "Entering Stmt_List function; current token is: " << lex->GetTokenName(token) <<
 	", lexeme: " << lex->GetLexeme() << endl; //enter funct name
 int errors = 0;
 //check if current token is in first and follows of respective
@@ -358,7 +367,7 @@ while(itr1 == stmt_list_firsts.end() && itr2 == stmt_list_follows.end()){
 
 
 if(token == IDENT_T || token == LPAREN_T || token == NUMLIT_T || token == STRLIT_T || token == QUOTE_T){
-	
+
 	p2file << "Using Rule 5" << endl;
 
 	errors+= stmt();
@@ -381,7 +390,7 @@ p2file << "Exiting Stmt_List function; current token is: " << lex->GetTokenName(
 
 return errors;
 
-	
+
 }
 
 
@@ -438,12 +447,12 @@ int SyntacticalAnalyzer::stmt ()
 
 		p2file << "Using Rule 9" << endl;
 		token = lex->GetToken();
-	
+
 		errors+= action();
 
 		if( token == RPAREN_T){
 
-			token = lex->GetToken(); 
+			token = lex->GetToken();
 
 		}else{
 			errors++;
@@ -524,7 +533,7 @@ int SyntacticalAnalyzer::literal ()
 
 	return errors;
 
-	
+
 }
 
 
@@ -543,7 +552,7 @@ int SyntacticalAnalyzer::quoted_lit ()
 
 	/*
 	13. <quoted_lit> -> <any_other_token>
-	
+
 	*/
 
 	p2file << "Entering Quoted_Lit function; current token is: " << lex->GetTokenName(token) << ", lexeme: " << lex->GetLexeme() << endl; //enter funct name
@@ -652,7 +661,7 @@ int SyntacticalAnalyzer::param_list ()
 	16. <param_list> -> IDENT_T <param_list>
 	17. <param_list> -> λ
 
-*/	
+*/
 	p2file << "Entering Param_List function; current token is: " << lex->GetTokenName(token) << ", lexeme: " << lex->GetLexeme() << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
@@ -755,7 +764,7 @@ int SyntacticalAnalyzer::stmt_pair()
 20. <stmt_pair> -> LPAREN_T <stmt_pair_body>
 21. <stmt_pair> -> λ
 	*/
-	
+
 	p2file << "Entering Stmt_Pair function; current token is: " << lex->GetTokenName(token) << ", lexeme: " << lex->GetLexeme() << endl; //enter funct name
 	int errors = 0;
 	//check if current token is in first and follows of respective
@@ -836,7 +845,7 @@ int SyntacticalAnalyzer::stmt_pair_body()
 			errors++;
 			lex->ReportError("Expected first of stmt_pair_body; found: " + lex->GetTokenName(token));
 		}
-	} 
+	}
 
 	else if (token == IDENT_T || token == LPAREN_T || token == NUMLIT_T || token == STRLIT_T || token == QUOTE_T){
 		p2file << "Using Rule 22" << endl;
@@ -901,7 +910,7 @@ int SyntacticalAnalyzer::action()
 	type5
 38. <action> -> MINUS_T <stmt> <stmt_list>
 39. <action> -> DIV_T <stmt> <stmt_list>
-	
+
 	type6
 28. <action> -> AND_T <stmt_list>
 29. <action> -> OR_T <stmt_list>
@@ -959,7 +968,7 @@ int SyntacticalAnalyzer::action()
 			errors++;
 			lex->ReportError("Expected first of action, found: " + lex->GetTokenName(token));
 		}
-	//type3	
+	//type3
 	}else if(token == LISTOP_T || token == NUMBERP_T || token == SYMBOLP_T || token == LISTP_T || token == ZEROP_T || token == NULLP_T || token == NOT_T || token == STRINGP_T || token == DISPLAY_T){
 	/*
 26. <action> -> LISTOP_T <stmt>
@@ -992,12 +1001,12 @@ int SyntacticalAnalyzer::action()
 			p2file << "Using Rule 48" << endl;
 		}
 
-	
+
 		token = lex->GetToken();
 		errors += stmt();
-		
 
-	
+
+
 	//type4
 	}else if(token == CONS_T || token == MODULO_T){/*
 27. <action> -> CONS_T <stmt> <stmt>
@@ -1011,7 +1020,7 @@ int SyntacticalAnalyzer::action()
 		token = lex->GetToken();
 		errors += stmt();
 		errors += stmt();
-	
+
 	}else if(token == MINUS_T || token  == DIV_T){
 	//type5
 // 38. <action> -> MINUS_T <stmt> <stmt_list>
@@ -1028,7 +1037,7 @@ int SyntacticalAnalyzer::action()
 
 
 	}else if(token == AND_T || token  == OR_T || token  == PLUS_T || token  == MULT_T || token  == EQUALTO_T || token  == GT_T || token  == LT_T || token  == GTE_T || token  == LTE_T || token == IDENT_T){
-	//type 6 
+	//type 6
 // 28. <action> -> AND_T <stmt_list>
 // 29. <action> -> OR_T <stmt_list>
 // 37. <action> -> PLUS_T <stmt_list>
@@ -1274,8 +1283,3 @@ p2file << "Exiting Any_Other_Token function; current token is: " << lex->GetToke
 return errors;
 
 }
-
-
-
-
-

@@ -22,12 +22,12 @@ using namespace std;
 *              This array variable is used by the GetTokenName function.       *
 *******************************************************************************/
 
-static string token_names[] = {"{}", "IDENT_T", "NUMLIT_T", "STRLIT_T", "CONS_T", "IF_T", "COND_T", 
-			"DISPLAY_T", "NEWLINE_T", "LISTOP_T", "AND_T", "OR_T", "NOT_T", 
-			"DEFINE_T", "NUMBERP_T", "SYMBOLP_T", "LISTP_T", "ZEROP_T", "NULLP_T", 
-			"STRINGP_T", "MODULO_T", "ELSE_T", "PLUS_T", "MINUS_T", "DIV_T", "MULT_T", 
+static string token_names[] = {"{}", "IDENT_T", "NUMLIT_T", "STRLIT_T", "CONS_T", "IF_T", "COND_T",
+			"DISPLAY_T", "NEWLINE_T", "LISTOP_T", "AND_T", "OR_T", "NOT_T",
+			"DEFINE_T", "NUMBERP_T", "SYMBOLP_T", "LISTP_T", "ZEROP_T", "NULLP_T",
+			"STRINGP_T", "MODULO_T", "ELSE_T", "PLUS_T", "MINUS_T", "DIV_T", "MULT_T",
 			"EQUALTO_T", "GT_T", "LT_T", "GTE_T", "LTE_T", "LPAREN_T", "RPAREN_T",
-			"QUOTE_T", "ERROR_T", "EOF_T"}; 
+			"QUOTE_T", "ERROR_T", "EOF_T"};
 
 /*******************************************************************************
 * Variable: table                                                              *
@@ -38,7 +38,7 @@ static string token_names[] = {"{}", "IDENT_T", "NUMLIT_T", "STRLIT_T", "CONS_T"
 *              This 2D-array variable is used by the GetToken function.        *
 *******************************************************************************/
 
-static int table [][21] = 
+static int table [][21] =
 //	  a   c   d   r   b   0   .   (   )   +   -   *   /   '   =   <   >   ?   _   "  other
    {{32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32},  // 0 not used
 	{ 8,  9,  8,  8,  8,  2,  3, 24, 24,  5,  6, 24, 24, 24, 24,  7,  7, 32, 32, 12, 24},  // 1 starting
@@ -81,12 +81,12 @@ LexicalAnalyzer::LexicalAnalyzer (char * filename)
 		cout << "File " << filename << " not found\n";
 		exit (2);
 	}
-	string p1name = name.substr (0, name.length()-3) + ".p1"; 
+	string p1name = name.substr (0, name.length()-3) + ".p1";
 	p1file.open (p1name.c_str());
-	string listingname = name.substr (0, name.length()-3) + ".lst"; 
+	string listingname = name.substr (0, name.length()-3) + ".lst";
 	listing.open (listingname.c_str());
 	listing << "Input file: " << filename << endl;
-	string debugname = name.substr (0, name.length()-3) + ".dbg"; 
+	string debugname = name.substr (0, name.length()-3) + ".dbg";
 	debug.open (debugname.c_str());
 	debug << "Input file: " << filename << endl;
 	line = " ";
@@ -157,7 +157,7 @@ token_type LexicalAnalyzer::GetToken ()
 	error_type = 1;
 	lexeme = "";
 	int state = 1;
-	token_type token = NONE;
+	token_type token = NON;
 	map <string, token_type>::iterator itr;
 	if (input.fail())
 	{
@@ -177,12 +177,12 @@ token_type LexicalAnalyzer::GetToken ()
 				return EOF_T;
 			}
 			linenum++;
-			listing << setw(4) << right << linenum << ": " << line << endl;	
-			debug << setw(4) << right << linenum << ": " << line << endl;	
+			listing << setw(4) << right << linenum << ": " << line << endl;
+			debug << setw(4) << right << linenum << ": " << line << endl;
 			line += ' ';
 			pos = 0;
 		}
-	while (token == NONE)
+	while (token == NON)
 	{
 		char c = line[pos++];
 		lexeme += c;
@@ -190,9 +190,9 @@ token_type LexicalAnalyzer::GetToken ()
 		{ // used if end of line found in a string literal
 			token = ERROR_T;
 			error_type = 2;
-			break;	
+			break;
 		}
-		if (isalpha(c) && (c != 'a' && c != 'c' && c != 'd' && c != 'r')) 
+		if (isalpha(c) && (c != 'a' && c != 'c' && c != 'd' && c != 'r'))
 			c = 'b';
 		else if (isdigit(c))
 			c = '0';
@@ -215,7 +215,7 @@ token_type LexicalAnalyzer::GetToken ()
 			itr = symbols.find (lexeme);
 			if (itr != symbols.end())
 				token = itr->second;
-			else 
+			else
 				token = IDENT_T;
 			break;
 		    case 22: // numeric literal
