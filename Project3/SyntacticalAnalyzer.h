@@ -63,6 +63,8 @@ class SyntacticalAnalyzer
 
 	CodeGen * codeGen;
 
+	bool firstParam;
+
 };
 	
 #endif

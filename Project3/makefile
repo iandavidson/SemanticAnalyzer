@@ -13,14 +13,14 @@ LexicalAnalyzer.o : LexicalAnalyzer.cpp LexicalAnalyzer.h
 Object.o : Object.cpp Object.h
 	g++ -g -c -std=c++11 Object.cpp
 
-CodeGenerator.o : CodeGenerator.cpp CodeGenerator.h LexicalAnalyzer.h
+CodeGenerator.o : CodeGenerator.cpp CodeGenerator.h LexicalAnalyzer.h Object.h
 	g++ -g -c -std=c++11 CodeGenerator.cpp
 
 SyntacticalAnalyzer.o : SyntacticalAnalyzer.cpp SyntacticalAnalyzer.h LexicalAnalyzer.h Object.h CodeGenerator.h
 	g++ -g -c -std=c++11 SyntacticalAnalyzer.cpp
 
 clean :
-	rm -rf *.o P3.out *.gch
+	rm -rf *.o P3.out *.gch *.lst *.p1 *.p2 *.dbg test.cpp
 
 run :
 	make clean
