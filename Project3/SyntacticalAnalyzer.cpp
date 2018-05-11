@@ -102,7 +102,6 @@ SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 *******************************************************************************/
 SyntacticalAnalyzer::~SyntacticalAnalyzer ()
 {
-	codeGen->EndFunction();
 	delete lex;
 	p2file.close ();
 }
@@ -227,7 +226,14 @@ int SyntacticalAnalyzer::define ()
 
 
 	if(token == IDENT_T){
-		codeGen->StartFunction(lex->GetLexeme());
+		if (lex->GetLexeme() == "main") {
+			inMain = true;
+		}
+		else {
+			inMain = false;
+		}
+		codeGen->StartFunction(lex->GetLexeme(), inMain);
+
 		token = lex->GetToken();
 	}else{
 		errors++;
@@ -266,6 +272,9 @@ int SyntacticalAnalyzer::define ()
 
 	p2file << "Exiting Define function; current token is: "
 			<< lex->GetTokenName (token) << endl;
+
+	codeGen->EndFunction(inMain);
+
 
 	return errors;
 
@@ -970,6 +979,7 @@ int SyntacticalAnalyzer::action()
 		//25. <action> -> COND_T LPAREN_T <stmt_pair_body>
 		p2file << "Using Rule 25" << endl;
 		token = lex->GetToken();
+		codeGen->startCondition();
 
 		if(token == LPAREN_T){
 			token = lex->GetToken();
@@ -1231,6 +1241,7 @@ if(token == LPAREN_T){//type1
 		p2file << "Using Rule 55" << endl;
 	}else if(token == DISPLAY_T){
 		p2file << "Using Rule 56" << endl;
+		codeGen->WriteCode("cout <<");
 	}else if(token == NEWLINE_T){
 		p2file << "Using Rule 57" << endl;
 		codeGen->NewLineFunction();

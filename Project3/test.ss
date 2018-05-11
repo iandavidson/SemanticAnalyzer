@@ -1,3 +1,10 @@
-(define (function var1 var2 var3)
-	(display(newline))
+(define (function var)
+	(cond
+	    ((number? var) 1)
+	    (else 0)
+	)
+)
+
+(define (main)
+    (function 12)
 )

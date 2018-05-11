@@ -34,18 +34,23 @@ CodeGen::~CodeGen ()
 /********************************************************************************/
 /* This function will								*/
 /********************************************************************************/
-void CodeGen::WriteCode (int tabs, string code)
+void CodeGen::WriteCode (string code)
 {
-	for (int t = 0; t < tabs; t++)
-		cpp << '\t';
+//	for (int t = 0; t < tabs; t++)
+//		cpp << '\t';
 	cpp << code;
 }
 
 
-void CodeGen::StartFunction(string functionName){
-	string concatenate = "";
-	concatenate  = concatenate + "Object " + functionName + "(";
-	cpp << concatenate;
+void CodeGen::StartFunction(string functionName, bool inMain){
+	if (inMain){
+		cpp << "\nint main(";
+	}
+	else {
+		string concatenate = "";
+		concatenate = concatenate + "Object " + functionName + "(";
+		cpp << concatenate;
+	}
 }
 
 void CodeGen::FunctionParameters(string parameter ){
@@ -61,13 +66,26 @@ void CodeGen::ParameterEnd(){
 	cpp << ")\n{" << endl;
 }
 
-
 void CodeGen::NewLineFunction(){
 	cpp << "\tcout << endl;" << endl;
 }
 
-void CodeGen::EndFunction(){
+void CodeGen::EndFunction(bool inMain){
+	if (inMain){
+		cpp << "\treturn 0;" << endl;
+	}
 	cpp << "}" << endl;
 }
 
 
+void CodeGen::startCondition()
+{
+
+	cpp << "if (";
+}
+
+void CodeGen::endCondition()
+{
+
+	cpp << ")" << endl;
+}
