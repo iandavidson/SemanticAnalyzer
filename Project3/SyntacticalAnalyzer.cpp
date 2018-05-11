@@ -87,8 +87,8 @@ SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 	string name = filename;
 	string p2name = name.substr (0, name.length()-3) + ".p2";
 	p2file.open (p2name.c_str());// "./output/" + p2name.c_str()
-	token = lex->GetToken();
 	codeGen = new CodeGen(p2name, lex);
+	token = lex->GetToken();
 	int errors = Program ();
 
 }
@@ -102,6 +102,7 @@ SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 *******************************************************************************/
 SyntacticalAnalyzer::~SyntacticalAnalyzer ()
 {
+	codeGen->EndFunction();
 	delete lex;
 	p2file.close ();
 }
@@ -201,7 +202,6 @@ int SyntacticalAnalyzer::define ()
 	p2file << "Using Rule 2" << endl;
 	if(token == LPAREN_T){
 		token = lex->GetToken();
-		codeGen->WriteCode(0 , lex->GetLexeme());
 
 	}else{
 		errors++;
@@ -210,7 +210,6 @@ int SyntacticalAnalyzer::define ()
 
 	if(token == DEFINE_T){
 		token = lex->GetToken();
-		codeGen->WriteCode(0 , lex->GetLexeme());
 
 	}else{
 		errors++;
@@ -220,7 +219,6 @@ int SyntacticalAnalyzer::define ()
 
 	if(token == LPAREN_T){
 		token = lex->GetToken();
-		codeGen->WriteCode(0 , lex->GetLexeme());
 
 	}else{
 		errors++;
@@ -229,10 +227,8 @@ int SyntacticalAnalyzer::define ()
 
 
 	if(token == IDENT_T){
-
+		codeGen->StartFunction(lex->GetLexeme());
 		token = lex->GetToken();
-		codeGen->WriteCode(0 , lex->GetLexeme());
-
 	}else{
 		errors++;
 		lex->ReportError("expecting first IDENT_T, found: " + lex->GetTokenName(token));
@@ -240,7 +236,14 @@ int SyntacticalAnalyzer::define ()
 
 	//if member of first of param_list
 	//not sure if this should be checked for here or if we should just call param_list and do this checking there :/
+
+	firstParam = true;
+
 	errors += param_list();
+
+	codeGen->ParameterEnd();
+
+	firstParam = true;
 
 	if(token == RPAREN_T){
 		token = lex->GetToken();
@@ -678,13 +681,21 @@ int SyntacticalAnalyzer::param_list ()
 
 	//do specific rule related procedure
 	if(token == IDENT_T){
+		if (!firstParam){
+			codeGen->AddComma();
+		}
 		p2file << "Using Rule 16" << endl;
+		firstParam = false;
+		codeGen->FunctionParameters(lex->GetLexeme());
+
 		token = lex->GetToken();
 
 		errors += param_list();
 
+
 	}else if(token == RPAREN_T){ //follows of param_list
 	//dont do shit here
+		// go back and delete comma from output file
 		p2file << "Using Rule 17" << endl;
 
 	}else{
@@ -999,6 +1010,8 @@ int SyntacticalAnalyzer::action()
 			p2file << "Using Rule 36" << endl;
 		}else if(token == DISPLAY_T){
 			p2file << "Using Rule 48" << endl;
+			codeGen->NewLineFunction();
+
 		}
 
 
@@ -1220,6 +1233,8 @@ if(token == LPAREN_T){//type1
 		p2file << "Using Rule 56" << endl;
 	}else if(token == NEWLINE_T){
 		p2file << "Using Rule 57" << endl;
+		codeGen->NewLineFunction();
+
 	}else if(token == LISTOP_T){
 		p2file << "Using Rule 58" << endl;
 	}else if(token == AND_T){

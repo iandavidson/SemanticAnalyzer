@@ -1,3 +1,3 @@
-(define (main)
-	(newline)
+(define (function var1 var2 var3)
+	(display(newline))
 )
