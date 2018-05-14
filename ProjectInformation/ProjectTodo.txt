@@ -1,0 +1,15 @@
+Big things:
+
+add ShouldReturn bool to:
+    action:
+	cons,listop, plus, and, or, mult, equalto, gt, lt, gte, lte, ident, minus, div 
+
+    stmt:
+	Ident, quote, numlit
+
+    stmt_list:
+	Recursive call: as value
+	calling statement : always false
+
+When to add semis:
+     sometimes if shouldReturn is true and were at the "end of the line" with actions put the ";\n"
