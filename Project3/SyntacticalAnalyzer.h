@@ -49,8 +49,8 @@ class SyntacticalAnalyzer
 	int Program ();
 	int define();
 	int more_defines();
-	int stmt_list();
-	int stmt();
+	int stmt_list(bool isReturned = false);
+	int stmt(bool isReturned = false);
 	int literal();
 	int quoted_lit();
 	int more_tokens();
@@ -58,7 +58,7 @@ class SyntacticalAnalyzer
 	int else_part();
 	int stmt_pair();
 	int stmt_pair_body();
-	int action();
+	int action(bool isReturned = false);
 	int any_other_token();
 
 	CodeGen * codeGen;

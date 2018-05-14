@@ -77,15 +77,29 @@ void CodeGen::EndFunction(bool inMain){
 	cpp << "}" << endl;
 }
 
-
-void CodeGen::startCondition()
+void CodeGen::startIf()
 {
 
 	cpp << "if (";
 }
 
-void CodeGen::endCondition()
+void CodeGen::endIf()
 {
 
-	cpp << ")" << endl;
+	cpp << ")\n{" << endl;
+}
+
+void CodeGen::startObjectInt(int num)
+{
+	cpp << "Object (" << num;
+}
+
+void CodeGen::startObjectStr(string str)
+{
+	cpp << "Object (" << str;
+}
+
+void CodeGen::endObject()
+{
+	cpp << ")";
 }

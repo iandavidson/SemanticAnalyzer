@@ -23,10 +23,14 @@ class CodeGen
 	void AddComma();
 	void NewLineFunction();
 
-	void startCondition();
-	void endCondition();
+	void startIf();
+	void endIf();
 
 	void WriteCode (string code);
+	void startObjectInt(int num);
+	void startObjectStr(string str);
+
+	void endObject();
 
 
 private:

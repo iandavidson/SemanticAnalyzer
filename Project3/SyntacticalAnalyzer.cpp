@@ -258,7 +258,8 @@ int SyntacticalAnalyzer::define ()
 		lex->ReportError("expecting first RPAREN_T, found: " + lex->GetTokenName(token));
 	}
 
-	errors += stmt();
+	errors += stmt(true);
+
 
 
 	errors += stmt_list();
@@ -352,7 +353,7 @@ int SyntacticalAnalyzer::more_defines ()
 * Description: This function will apply the grammar rules defined below for the*
 * non-terminal state "stmt_list"                                               *
 *******************************************************************************/
-int SyntacticalAnalyzer::stmt_list ()
+int SyntacticalAnalyzer::stmt_list (bool isReturned)
 {
 /*
 	5. <stmt_list> -> <stmt> <stmt_list>
@@ -383,6 +384,11 @@ if(token == IDENT_T || token == LPAREN_T || token == NUMLIT_T || token == STRLIT
 	p2file << "Using Rule 5" << endl;
 
 	errors+= stmt();
+
+	if ( isReturned )
+	{
+		codeGen->WriteCode( ";\n" );
+	}
 
 	errors+= stmt_list();
 
@@ -416,7 +422,7 @@ return errors;
 * Description: This function will apply the grammar rules defined below for the*
 * non-terminal state "stmt"                                                    *
 *******************************************************************************/
-int SyntacticalAnalyzer::stmt ()
+int SyntacticalAnalyzer::stmt (bool isReturned)
 {
 
 	/*
@@ -448,6 +454,10 @@ int SyntacticalAnalyzer::stmt ()
 	if(token == NUMLIT_T || token == STRLIT_T || token == QUOTE_T){
 		p2file << "Using Rule 7" << endl;
 		errors+= literal();
+		if ( isReturned )
+		{
+			codeGen->WriteCode( ";\n" );
+		}
 	}
 	else if (token == IDENT_T)
 	{
@@ -459,7 +469,6 @@ int SyntacticalAnalyzer::stmt ()
 
 		p2file << "Using Rule 9" << endl;
 		token = lex->GetToken();
-
 		errors+= action();
 
 		if( token == RPAREN_T){
@@ -522,17 +531,24 @@ int SyntacticalAnalyzer::literal ()
 	{
 		if(token == NUMLIT_T){
 			p2file << "Using Rule 10" << endl;
+			int stringToInt = stoi(lex->GetLexeme());
+			codeGen->startObjectInt(stringToInt);
 		}else if(token == STRLIT_T){
 			p2file << "Using Rule 11" << endl;
+			codeGen->startObjectStr(lex->GetLexeme());
+
 		}
 		token = lex->GetToken();
+		codeGen->endObject();
 	}
 	else if(token == QUOTE_T)
 	{
+		codeGen->WriteCode("\"");
 		p2file << "Using Rule 12" << endl;
 		token = lex->GetToken();
 
 		errors += quoted_lit();
+		codeGen->WriteCode("\"");
 	}
 	else
 	{
@@ -903,7 +919,7 @@ int SyntacticalAnalyzer::stmt_pair_body()
 * Description: This function will apply the grammar rules defined below for the*
 * non-terminal state "action"                                                  *
 *******************************************************************************/
-int SyntacticalAnalyzer::action()
+int SyntacticalAnalyzer::action(bool isReturned)
 {
 /*
 	type 1
@@ -979,7 +995,7 @@ int SyntacticalAnalyzer::action()
 		//25. <action> -> COND_T LPAREN_T <stmt_pair_body>
 		p2file << "Using Rule 25" << endl;
 		token = lex->GetToken();
-		codeGen->startCondition();
+		codeGen->startIf();
 
 		if(token == LPAREN_T){
 			token = lex->GetToken();
@@ -989,6 +1005,7 @@ int SyntacticalAnalyzer::action()
 			errors++;
 			lex->ReportError("Expected first of action, found: " + lex->GetTokenName(token));
 		}
+		codeGen->endIf();
 	//type3
 	}else if(token == LISTOP_T || token == NUMBERP_T || token == SYMBOLP_T || token == LISTP_T || token == ZEROP_T || token == NULLP_T || token == NOT_T || token == STRINGP_T || token == DISPLAY_T){
 	/*

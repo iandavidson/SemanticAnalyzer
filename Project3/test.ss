@@ -1,8 +1,5 @@
 (define (function var)
-	(cond
-	    ((number? var) 1)
-	    (else 0)
-	)
+	(display(var))
 )
 
 (define (main)
