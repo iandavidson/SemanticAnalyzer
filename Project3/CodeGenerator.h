@@ -14,15 +14,22 @@ class CodeGen
     public:
 	CodeGen (string filename, LexicalAnalyzer * L);
 	~CodeGen ();
-	void WriteCode (int tabs, string code);
-	void StartFunction(string functionName);
+
+	void StartFunction(string functionName, bool inMain);
 	void FunctionParameters(string functionName);
-	void EndFunction();
 	void ParameterEnd();
+	void EndFunction(bool inMain);
+
 	void AddComma();
 	void NewLineFunction();
 
-    private:
+	void startCondition();
+	void endCondition();
+
+	void WriteCode (string code);
+
+
+private:
 	LexicalAnalyzer * lex;
 	ofstream cpp;
 
