@@ -1267,10 +1267,13 @@ if(token == LPAREN_T){//type1
 		p2file << "Using Rule 58" << endl;
 	}else if(token == AND_T){
 		p2file << "Using Rule 59" << endl;
+        codeGen->WriteCode("&&");
 	}else if(token == OR_T){
 		p2file << "Using Rule 60" << endl;
+        codeGen->WriteCode("||");
 	}else if(token == NOT_T){
 		p2file << "Using Rule 61" << endl;
+        codeGen->WriteCode("!");
 	}else if(token == DEFINE_T){
 		p2file << "Using Rule 62" << endl;
 	}else if(token == NUMBERP_T){
@@ -1283,28 +1286,39 @@ if(token == LPAREN_T){//type1
 		p2file << "Using Rule 66" << endl;
 	}else if(token == NULLP_T){
 		p2file << "Using Rule 67" << endl;
+        codeGen->WriteCode("NULL");
 	}else if(token == STRINGP_T){
 		p2file << "Using Rule 68" << endl;
 	}else if(token == PLUS_T){
 		p2file << "Using Rule 69" << endl;
+        codeGen->WriteCode("+");
 	}else if(token == MINUS_T){
 		p2file << "Using Rule 70" << endl;
+        codeGen->WriteCode("-");
 	}else if(token == DIV_T){
 		p2file << "Using Rule 71" << endl;
+        codeGen->WriteCode("/");
 	}else if(token == MULT_T){
 		p2file << "Using Rule 72" << endl;
+        codeGen->WriteCode("*");
 	}else if(token == MODULO_T){
 		p2file << "Using Rule 73" << endl;
+        codeGen->WriteCode("%");
 	}else if(token == EQUALTO_T){
 		p2file << "Using Rule 74" << endl;
+        codeGen->WriteCode("==");
 	}else if(token == GT_T){
 		p2file << "Using Rule 75" << endl;
+        codeGen->WriteCode(">");
 	}else if(token == LT_T){
 		p2file << "Using Rule 76" << endl;
+        codeGen->WriteCode("<");
 	}else if(token == GTE_T){
 		p2file << "Using Rule 77" << endl;
+        codeGen->WriteCode(">=");
 	}else if(token == LTE_T){
 		p2file << "Using Rule 78" << endl;
+        codeGen->WriteCode("<=");
 	}else if(token == COND_T){
 		p2file << "Using Rule 80" << endl;
 	}else if(token == ELSE_T){
