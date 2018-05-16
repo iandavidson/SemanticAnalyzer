@@ -20,7 +20,7 @@ SyntacticalAnalyzer.o : SyntacticalAnalyzer.cpp SyntacticalAnalyzer.h LexicalAna
 	g++ -g -c -std=c++11 SyntacticalAnalyzer.cpp
 
 Test.x : Test.o Object.o
-	g++ -std=c++11  -g -o Test.x Test.o
+	g++ -std=c++11  -g -o Test.x Test.o Object.o
 
 Test.o : Test.cpp Object.h
 	g++ -g -c -std=c++11 Test.cpp
