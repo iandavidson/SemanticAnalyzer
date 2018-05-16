@@ -20,7 +20,7 @@ CodeGen::CodeGen (string filename, LexicalAnalyzer * L)
 	 cpp << "// File: " << cppname << endl << endl;
 	 cpp << "#include <iostream>" << endl;
 	 cpp << "#include \"Object.h\"" << endl;
-	 cpp << "using namespace std;" << endl << endl;
+	 cpp << "using namespace std;" << endl << endl << endl;
 }
 
 /********************************************************************************/
@@ -72,7 +72,10 @@ void CodeGen::NewLineFunction(){
 
 void CodeGen::EndFunction(bool inMain){
 	if (inMain){
-		cpp << "\treturn 0;" << endl;
+		cpp << "return 0;" << endl;
+	}
+	else{
+		cpp << "return __RetVal;" << endl;
 	}
 	cpp << "}" << endl;
 }
@@ -118,3 +121,4 @@ void CodeGen::returnedIdentifier( string toReturn )
 /********************************************************************************/
 	cpp << "__retVal = Object(" << toReturn << ");" << endl;
 }
+

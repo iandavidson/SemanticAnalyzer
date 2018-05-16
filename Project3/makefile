@@ -20,7 +20,7 @@ SyntacticalAnalyzer.o : SyntacticalAnalyzer.cpp SyntacticalAnalyzer.h LexicalAna
 	g++ -g -c -std=c++11 SyntacticalAnalyzer.cpp
 
 Test.x : Test.o Object.o
-	g++ -std=c++11  -g -o Test.x Test.o Object.o
+	g++ -std=c++11  -g -o Test.x Test.o
 
 Test.o : Test.cpp Object.h
 	g++ -g -c -std=c++11 Test.cpp
@@ -38,14 +38,14 @@ runTest :
 	./Test.x
 
 submit : Project3.cpp LexicalAnalyzer.h LexicalAnalyzer.cpp SyntacticalAnalyzer.h SyntacticalAnalyzer.cpp makefile README.txt
-	rm -rf TeamTP2
-	mkdir TeamTP2
-	cp Project3.cpp TeamTP2
-	cp LexicalAnalyzer.h TeamTP2
-	cp LexicalAnalyzer.cpp TeamTP2
-	cp SyntacticalAnalyzer.h TeamTP2
-	cp SyntacticalAnalyzer.cpp TeamTP2
-	cp makefile TeamTP2
-	cp README.txt TeamTP2
-	tar cfvz TeamTP2.tgz TeamTP2
-	cp TeamTP2.tgz ~tiawatts/cs460drop
+	rm -rf Team4P3
+	mkdir Team4P3
+	cp Project3.cpp Team4P3
+	cp LexicalAnalyzer.h Team4P3
+	cp LexicalAnalyzer.cpp Team4P3
+	cp SyntacticalAnalyzer.h Team4P3
+	cp SyntacticalAnalyzer.cpp Team4P3
+	cp makefile Team4P3
+	cp README.txt Team4P3
+	tar cfvz Team4P3.tgz Team4P3
+	cp Team4P3.tgz ~tiawatts/cs460drop

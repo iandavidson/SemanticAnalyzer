@@ -324,6 +324,7 @@ int SyntacticalAnalyzer::more_defines ()
 
 		//fosho rule 3
 		p2file << "Using Rule 3" << endl;
+		codeGen->WriteCode("\n");
 		errors += define();
 
 		errors += more_defines();
@@ -1045,33 +1046,44 @@ int SyntacticalAnalyzer::action(bool isReturned, string infix)
 36. <action> -> STRINGP_T <stmt>
 48. <action> -> DISPLAY_T <stmt>
 	*/
+		bool display = false;
 		if(token == LISTOP_T){
 			p2file << "Using Rule 26" << endl;
+			codeGen->WriteCode("listop (\"" + lex->GetLexeme() + "\", ");
 		}else if(token == NUMBERP_T){
 			p2file << "Using Rule 31" << endl;
-			codeGen->WriteCode("isDigit (");
+			codeGen->WriteCode("numberp(");
 		}else if(token == SYMBOLP_T){
 			p2file << "Using Rule 32" << endl;
+			codeGen->WriteCode("symbolp(");
 		}else if(token == LISTP_T){
 			p2file << "Using Rule 33" << endl;
+			codeGen->WriteCode("listp(");
 		}else if(token == ZEROP_T){
 			p2file << "Using Rule 34" << endl;
+			codeGen->WriteCode("zerop(");
 		}else if(token == NULLP_T){
 			p2file << "Using Rule 35" << endl;
+			codeGen->WriteCode("nullp(");
 		}else if(token == NOT_T){
 			p2file << "Using Rule 30" << endl;
+			codeGen->WriteCode("!(");
 		}else if(token == STRINGP_T){
 			p2file << "Using Rule 36" << endl;
+			codeGen->WriteCode("stringp(");
 		}else if(token == DISPLAY_T){
 			p2file << "Using Rule 48" << endl;
 			codeGen->WriteCode("cout << ");
-
+			display=true;
 		}
-
-
 		token = lex->GetToken();
 		errors += stmt();
-		codeGen->WriteCode(" ;\n");
+		if (!display){
+//			codeGen->WriteCode(")");
+		}
+		else{
+			codeGen->WriteCode(" ;\n");
+		}
 
 
 
@@ -1080,21 +1092,42 @@ int SyntacticalAnalyzer::action(bool isReturned, string infix)
 27. <action> -> CONS_T <stmt> <stmt>
 41. <action> -> MODULO_T <stmt> <stmt>
 	*/
+		bool cons = false;
 		if( token == CONS_T){
+			cons = true;
 			p2file << "Using Rule 27" << endl;
+
 		}else if(token == MODULO_T){
 			p2file << "Using Rule 41" << endl;
 			codeGen->WriteCode("(");
 			infix = " % ";
 		}
-		token = lex->GetToken();
-		errors += stmt(false, infix);
-		if ( token != RPAREN_T )
-		{
-			codeGen->WriteCode( infix );
+		if (!cons) {
+			token = lex->GetToken();
+			errors += stmt(false, infix);
+			if (token != RPAREN_T) {
+				codeGen->WriteCode(infix);
+			}
+			errors += stmt();
+			codeGen->WriteCode(")");
 		}
-		errors += stmt();
-		codeGen->WriteCode(")");
+		else{
+			token = lex->GetToken();
+			if ( isReturned )
+			{
+				codeGen->WriteCode( "__RetVal = " );
+			}
+			codeGen->WriteCode("cons ( ");
+			errors += stmt();
+			codeGen->WriteCode("), ");
+			errors += stmt();
+			codeGen->WriteCode(") )");
+			if ( isReturned )
+			{
+				codeGen->WriteCode( ";\n" );
+			}
+
+		}
 
 	}else if(token == MINUS_T || token  == DIV_T){
 	//type5
@@ -1134,7 +1167,10 @@ int SyntacticalAnalyzer::action(bool isReturned, string infix)
 // 45. <action> -> GTE_T <stmt_list>
 // 46. <action> -> LTE_T <stmt_list>
 // 47. <action> -> IDENT_T <stmt_list>
-		codeGen->WriteCode("(");
+		bool isIdent = false;
+		if (token != IDENT_T){
+			codeGen->WriteCode("(");
+		}
 		if(token == AND_T){
 			p2file << "Using Rule 28" << endl;
 			infix = " && ";
@@ -1165,12 +1201,18 @@ int SyntacticalAnalyzer::action(bool isReturned, string infix)
 			p2file << "Using Rule 46" << endl;
 		}else if(token == IDENT_T){
 			p2file << "Using Rule 47" << endl;
+			codeGen->WriteCode(lex->GetLexeme() + "()");
+			isIdent = true;
 		}
 
 		token = lex->GetToken();
 
 		errors += stmt_list(false, infix);
-		codeGen->WriteCode(")");
+
+		if (!isIdent){
+			codeGen->WriteCode("(");
+		}
+
 
 
 	}else if(token == NEWLINE_T){
