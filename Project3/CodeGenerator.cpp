@@ -119,6 +119,13 @@ void CodeGen::returnedIdentifier( string toReturn )
 /* This function sets toReturn to the value that will ultimately be returned    */
 /* from the function.									                        */
 /********************************************************************************/
-	cpp << "__retVal = Object(" << toReturn << ");" << endl;
+	cpp << "__RetVal = Object(" << toReturn << ");" << endl;
 }
 
+void CodeGen::startElse(){
+	cpp << "else\n{" << endl;
+}
+
+void CodeGen::endElse(){
+	cpp << "}" << endl;
+}

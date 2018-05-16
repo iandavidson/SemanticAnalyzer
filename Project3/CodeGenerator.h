@@ -30,11 +30,12 @@ class CodeGen
 	void startObjectInt(int num);
 	void startObjectStr(string str);
 	void startObjectFlo(double num);
-
 	void endObject();
 
 	void returnedIdentifier(string returnedId);
 
+	void startElse();
+	void endElse();
 
 private:
 	LexicalAnalyzer * lex;

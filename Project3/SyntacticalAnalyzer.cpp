@@ -260,7 +260,7 @@ int SyntacticalAnalyzer::define ()
 		lex->ReportError("expecting first RPAREN_T, found: " + lex->GetTokenName(token));
 	}
 
-	errors += stmt(true, "");
+	errors += stmt(true);
 
 
 
@@ -456,14 +456,29 @@ int SyntacticalAnalyzer::stmt (bool isReturned, string infix)
 	//if first of literal:
 	if(token == NUMLIT_T || token == STRLIT_T || token == QUOTE_T){
 		p2file << "Using Rule 7" << endl;
-		if ( isReturned )
-		{
-			codeGen->WriteCode( "__retVal = " );
+		if (token == NUMLIT_T || token == STRLIT_T){
+
+			if ( isReturned )
+			{
+				codeGen->returnedIdentifier( lex->GetLexeme() );
+			}
+//			else
+//			{
+//				codeGen->WriteCode( "Object(" + lex->GetLexeme() + ") " );
+//			}
+			errors += literal();
 		}
-		errors+= literal();
-		if ( isReturned )
-		{
-			codeGen->WriteCode( ";\n" );
+		else if (token == QUOTE_T){
+			if ( isReturned )
+			{
+				codeGen->WriteCode( "__RetVal = " );
+			}
+			errors += literal();
+			if ( isReturned )
+			{
+				codeGen->WriteCode( ";\n" );
+			}
+
 		}
 	}
 	else if (token == IDENT_T)
@@ -791,7 +806,9 @@ int SyntacticalAnalyzer::else_part ()
 	//do specific rule related procedure
 	if(token == IDENT_T || token == LPAREN_T || token == NUMLIT_T || token == STRLIT_T || token == QUOTE_T){//first of stmt
 		p2file << "Using Rule 18" << endl;
-		errors += stmt();
+		codeGen->startElse();
+		errors += stmt(true);
+		codeGen->endElse();
 
 	}else if(token == RPAREN_T){
 		//do nothing
@@ -1014,7 +1031,8 @@ int SyntacticalAnalyzer::action(bool isReturned, string infix)
 		errors+= stmt();
 		codeGen->endIf();
 
-		errors+= stmt();
+		errors+= stmt(true);
+		codeGen->WriteCode("}\n");
 		errors+= else_part();
 
 	//type2
@@ -1079,7 +1097,7 @@ int SyntacticalAnalyzer::action(bool isReturned, string infix)
 		token = lex->GetToken();
 		errors += stmt();
 		if (!display){
-//			codeGen->WriteCode(")");
+			codeGen->WriteCode(")");
 		}
 		else{
 			codeGen->WriteCode(" ;\n");
@@ -1119,9 +1137,9 @@ int SyntacticalAnalyzer::action(bool isReturned, string infix)
 			}
 			codeGen->WriteCode("cons ( ");
 			errors += stmt();
-			codeGen->WriteCode("), ");
+			codeGen->WriteCode(", ");
 			errors += stmt();
-			codeGen->WriteCode(") )");
+			codeGen->WriteCode(")");
 			if ( isReturned )
 			{
 				codeGen->WriteCode( ";\n" );
@@ -1133,6 +1151,10 @@ int SyntacticalAnalyzer::action(bool isReturned, string infix)
 	//type5
 // 38. <action> -> MINUS_T <stmt> <stmt_list>
 // 39. <action> -> DIV_T <stmt> <stmt_list>
+		if ( isReturned )
+		{
+			codeGen->WriteCode( "__RetVal = " );
+		}
 		codeGen->WriteCode("(");
 		if( token == MINUS_T){
 			p2file << "Using Rule 38" << endl;
@@ -1153,6 +1175,10 @@ int SyntacticalAnalyzer::action(bool isReturned, string infix)
 
 		errors += stmt_list(false, infix);
 		codeGen->WriteCode(")");
+		if ( isReturned )
+		{
+			codeGen->WriteCode(";\n");
+		}
 
 
 	}else if(token == AND_T || token  == OR_T || token  == PLUS_T || token  == MULT_T || token  == EQUALTO_T || token  == GT_T || token  == LT_T || token  == GTE_T || token  == LTE_T || token == IDENT_T){
@@ -1201,20 +1227,29 @@ int SyntacticalAnalyzer::action(bool isReturned, string infix)
 			p2file << "Using Rule 46" << endl;
 		}else if(token == IDENT_T){
 			p2file << "Using Rule 47" << endl;
-			codeGen->WriteCode(lex->GetLexeme() + "()");
+			codeGen->WriteCode(lex->GetLexeme() + "(");
 			isIdent = true;
+			if ( isReturned )
+			{
+				codeGen->WriteCode( "__RetVal = " );
+			}
+			token = lex->GetToken();
+			errors += stmt_list( isReturned, ", ");
+			codeGen->WriteCode(")");
+			if ( isReturned )
+			{
+				codeGen->WriteCode( ";\n" );
+			}
 		}
 
-		token = lex->GetToken();
+		if (!isIdent) {
+			token = lex->GetToken();
+			errors += stmt_list(false, infix);
+			codeGen->WriteCode(")");
 
-		errors += stmt_list(false, infix);
 
-		if (!isIdent){
-			codeGen->WriteCode("(");
+
 		}
-
-
-
 	}else if(token == NEWLINE_T){
 	//type7
 	// 49. <action> -> NEWLINE_T
