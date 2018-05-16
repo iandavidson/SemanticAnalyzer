@@ -19,6 +19,12 @@ CodeGenerator.o : CodeGenerator.cpp CodeGenerator.h LexicalAnalyzer.h Object.h
 SyntacticalAnalyzer.o : SyntacticalAnalyzer.cpp SyntacticalAnalyzer.h LexicalAnalyzer.h Object.h CodeGenerator.h
 	g++ -g -c -std=c++11 SyntacticalAnalyzer.cpp
 
+Test.x : Test.o Object.o
+	g++ -std=c++11  -g -o Test.x Test.o Object.o
+
+Test.o : Test.cpp Object.h
+	g++ -g -c -std=c++11 Test.cpp
+
 clean :
 	rm -rf *.o P3.out *.gch *.lst *.p1 *.p2 *.dbg test.cpp
 
@@ -27,6 +33,9 @@ run :
 	make
 	./P3.out ./test.ss
 
+runTest :
+	make Test.x
+	./Test.x
 
 submit : Project3.cpp LexicalAnalyzer.h LexicalAnalyzer.cpp SyntacticalAnalyzer.h SyntacticalAnalyzer.cpp makefile README.txt
 	rm -rf TeamTP2

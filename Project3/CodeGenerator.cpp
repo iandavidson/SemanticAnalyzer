@@ -63,7 +63,7 @@ void CodeGen::AddComma(){
 }
 
 void CodeGen::ParameterEnd(){
-	cpp << ")\n{" << endl;
+	cpp << ")\n{\nObject __RetVal;" << endl;
 }
 
 void CodeGen::NewLineFunction(){
@@ -99,7 +99,22 @@ void CodeGen::startObjectStr(string str)
 	cpp << "Object (" << str;
 }
 
+void CodeGen::startObjectFlo(double num)
+{
+	cpp << "Object (" << num;
+
+}
+
 void CodeGen::endObject()
 {
 	cpp << ")";
+}
+
+void CodeGen::returnedIdentifier( string toReturn )
+{
+/********************************************************************************/
+/* This function sets toReturn to the value that will ultimately be returned    */
+/* from the function.									                        */
+/********************************************************************************/
+	cpp << "__retVal = Object(" << toReturn << ");" << endl;
 }

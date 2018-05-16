@@ -14,6 +14,8 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <stdlib.h>
+
 #include "SyntacticalAnalyzer.h"
 
 using namespace std;
@@ -453,6 +455,10 @@ int SyntacticalAnalyzer::stmt (bool isReturned)
 	//if first of literal:
 	if(token == NUMLIT_T || token == STRLIT_T || token == QUOTE_T){
 		p2file << "Using Rule 7" << endl;
+		if ( isReturned )
+		{
+			codeGen->WriteCode( "__retVal = " );
+		}
 		errors+= literal();
 		if ( isReturned )
 		{
@@ -462,6 +468,14 @@ int SyntacticalAnalyzer::stmt (bool isReturned)
 	else if (token == IDENT_T)
 	{
 		p2file << "Using Rule 8" << endl;
+		if ( isReturned )
+		{
+			codeGen->returnedIdentifier( lex->GetLexeme() );
+		}
+		else
+		{
+			codeGen->WriteCode( lex->GetLexeme() );
+		}
 		token = lex->GetToken();
 
 	}
@@ -531,8 +545,17 @@ int SyntacticalAnalyzer::literal ()
 	{
 		if(token == NUMLIT_T){
 			p2file << "Using Rule 10" << endl;
-			int stringToInt = stoi(lex->GetLexeme());
-			codeGen->startObjectInt(stringToInt);
+			string number = lex->GetLexeme();
+			size_t found = number.find(".");
+			// found a '.'
+			if (found!=string::npos){
+				double num = stod(number);
+				codeGen->startObjectFlo(num);
+			}
+			else {
+				int stringToInt = stoi(lex->GetLexeme());
+				codeGen->startObjectInt(stringToInt);
+			}
 		}else if(token == STRLIT_T){
 			p2file << "Using Rule 11" << endl;
 			codeGen->startObjectStr(lex->GetLexeme());
@@ -543,12 +566,12 @@ int SyntacticalAnalyzer::literal ()
 	}
 	else if(token == QUOTE_T)
 	{
-		codeGen->WriteCode("\"");
+		codeGen->WriteCode("Object (\"");
 		p2file << "Using Rule 12" << endl;
 		token = lex->GetToken();
 
 		errors += quoted_lit();
-		codeGen->WriteCode("\"");
+		codeGen->WriteCode("\")");
 	}
 	else
 	{
@@ -648,7 +671,7 @@ int SyntacticalAnalyzer::more_tokens ()
 	{//token is a first of any_o_t
 		p2file << "Using Rule 14" << endl;
 		errors += any_other_token();
-
+		codeGen->WriteCode(" ");
 		errors += more_tokens();
 
 
@@ -722,6 +745,7 @@ int SyntacticalAnalyzer::param_list ()
 	//dont do shit here
 		// go back and delete comma from output file
 		p2file << "Using Rule 17" << endl;
+
 
 	}else{
 		errors++;
@@ -983,10 +1007,12 @@ int SyntacticalAnalyzer::action(bool isReturned)
 	if(token == IF_T){
 		//24. <action> -> IF_T <stmt> <stmt> <else_part>
 		p2file << "Using Rule 24" << endl;
-
+		codeGen->startIf();
 		token = lex->GetToken();
 
 		errors+= stmt();
+		codeGen->endIf();
+
 		errors+= stmt();
 		errors+= else_part();
 
@@ -1023,6 +1049,7 @@ int SyntacticalAnalyzer::action(bool isReturned)
 			p2file << "Using Rule 26" << endl;
 		}else if(token == NUMBERP_T){
 			p2file << "Using Rule 31" << endl;
+			codeGen->WriteCode("isDigit (");
 		}else if(token == SYMBOLP_T){
 			p2file << "Using Rule 32" << endl;
 		}else if(token == LISTP_T){
@@ -1037,13 +1064,14 @@ int SyntacticalAnalyzer::action(bool isReturned)
 			p2file << "Using Rule 36" << endl;
 		}else if(token == DISPLAY_T){
 			p2file << "Using Rule 48" << endl;
-			codeGen->NewLineFunction();
+			codeGen->WriteCode("cout << ");
 
 		}
 
 
 		token = lex->GetToken();
 		errors += stmt();
+		codeGen->WriteCode(" ;\n");
 
 
 
@@ -1117,6 +1145,7 @@ int SyntacticalAnalyzer::action(bool isReturned)
 	}else if(token == NEWLINE_T){
 	//type7
 	// 49. <action> -> NEWLINE_T
+		codeGen->WriteCode("cout << endl;\n");
 		token = lex->GetToken();
 		p2file << "Using Rule 49" << endl;
 	}else{
@@ -1199,8 +1228,10 @@ while(itr1 == any_other_token_firsts.end() && itr2 == any_other_token_follows.en
 if(token == LPAREN_T){//type1
 	// 50. <any_other_token> -> LPAREN_T <more_tokens> RPAREN_T
 	p2file << "Using Rule 50" << endl;
+	codeGen->WriteCode( lex->GetLexeme() );
 	token = lex->GetToken();
 	errors += more_tokens();
+	codeGen->WriteCode( lex->GetLexeme() );
 	if(token == RPAREN_T){
 		token = lex->GetToken();
 	}else{
@@ -1248,9 +1279,14 @@ if(token == LPAREN_T){//type1
 */
 	if(token == IDENT_T){
 		p2file << "Using Rule 51" << endl;
+		codeGen->WriteCode(lex->GetLexeme());
+
+
 	}else if(token == NUMLIT_T){
+		codeGen->WriteCode(lex->GetLexeme());
 		p2file << "Using Rule 52" << endl;
 	}else if(token == STRLIT_T){
+		codeGen->WriteCode(lex->GetLexeme());
 		p2file << "Using Rule 53" << endl;
 	}else if(token == CONS_T){
 		p2file << "Using Rule 54" << endl;

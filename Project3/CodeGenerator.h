@@ -29,8 +29,11 @@ class CodeGen
 	void WriteCode (string code);
 	void startObjectInt(int num);
 	void startObjectStr(string str);
+	void startObjectFlo(double num);
 
 	void endObject();
+
+	void returnedIdentifier(string returnedId);
 
 
 private:
