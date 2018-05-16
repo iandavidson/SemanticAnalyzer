@@ -260,7 +260,7 @@ int SyntacticalAnalyzer::define ()
 		lex->ReportError("expecting first RPAREN_T, found: " + lex->GetTokenName(token));
 	}
 
-	errors += stmt(true);
+	errors += stmt(true, "");
 
 
 
@@ -355,7 +355,7 @@ int SyntacticalAnalyzer::more_defines ()
 * Description: This function will apply the grammar rules defined below for the*
 * non-terminal state "stmt_list"                                               *
 *******************************************************************************/
-int SyntacticalAnalyzer::stmt_list (bool isReturned)
+int SyntacticalAnalyzer::stmt_list (bool isReturned, string infix)
 {
 /*
 	5. <stmt_list> -> <stmt> <stmt_list>
@@ -385,14 +385,14 @@ if(token == IDENT_T || token == LPAREN_T || token == NUMLIT_T || token == STRLIT
 
 	p2file << "Using Rule 5" << endl;
 
-	errors+= stmt();
+	errors+= stmt(false, infix);
 
-	if ( isReturned )
+	if ( token != RPAREN_T )
 	{
-		codeGen->WriteCode( ";\n" );
+		codeGen->WriteCode( infix );
 	}
 
-	errors+= stmt_list();
+	errors+= stmt_list(isReturned, infix);
 
 }else if (token == RPAREN_T){
 	//we chillin lambda case
@@ -424,7 +424,7 @@ return errors;
 * Description: This function will apply the grammar rules defined below for the*
 * non-terminal state "stmt"                                                    *
 *******************************************************************************/
-int SyntacticalAnalyzer::stmt (bool isReturned)
+int SyntacticalAnalyzer::stmt (bool isReturned, string infix)
 {
 
 	/*
@@ -483,7 +483,7 @@ int SyntacticalAnalyzer::stmt (bool isReturned)
 
 		p2file << "Using Rule 9" << endl;
 		token = lex->GetToken();
-		errors+= action();
+		errors+= action(isReturned, infix);
 
 		if( token == RPAREN_T){
 
@@ -943,7 +943,7 @@ int SyntacticalAnalyzer::stmt_pair_body()
 * Description: This function will apply the grammar rules defined below for the*
 * non-terminal state "action"                                                  *
 *******************************************************************************/
-int SyntacticalAnalyzer::action(bool isReturned)
+int SyntacticalAnalyzer::action(bool isReturned, string infix)
 {
 /*
 	type 1
@@ -1084,24 +1084,42 @@ int SyntacticalAnalyzer::action(bool isReturned)
 			p2file << "Using Rule 27" << endl;
 		}else if(token == MODULO_T){
 			p2file << "Using Rule 41" << endl;
+			codeGen->WriteCode("(");
+			infix = " % ";
 		}
 		token = lex->GetToken();
+		errors += stmt(false, infix);
+		if ( token != RPAREN_T )
+		{
+			codeGen->WriteCode( infix );
+		}
 		errors += stmt();
-		errors += stmt();
+		codeGen->WriteCode(")");
 
 	}else if(token == MINUS_T || token  == DIV_T){
 	//type5
 // 38. <action> -> MINUS_T <stmt> <stmt_list>
 // 39. <action> -> DIV_T <stmt> <stmt_list>
+		codeGen->WriteCode("(");
 		if( token == MINUS_T){
 			p2file << "Using Rule 38" << endl;
+			infix = " - ";
 		}else if(token == DIV_T){
 			p2file << "Using Rule 39" << endl;
+			infix = " / ";
+
 		}
 
 		token = lex->GetToken();
-		errors += stmt();
-		errors += stmt_list();
+		errors += stmt(false, infix);
+
+		if ( token != RPAREN_T )
+		{
+			codeGen->WriteCode( infix );
+		}
+
+		errors += stmt_list(false, infix);
+		codeGen->WriteCode(")");
 
 
 	}else if(token == AND_T || token  == OR_T || token  == PLUS_T || token  == MULT_T || token  == EQUALTO_T || token  == GT_T || token  == LT_T || token  == GTE_T || token  == LTE_T || token == IDENT_T){
@@ -1116,23 +1134,34 @@ int SyntacticalAnalyzer::action(bool isReturned)
 // 45. <action> -> GTE_T <stmt_list>
 // 46. <action> -> LTE_T <stmt_list>
 // 47. <action> -> IDENT_T <stmt_list>
+		codeGen->WriteCode("(");
 		if(token == AND_T){
 			p2file << "Using Rule 28" << endl;
+			infix = " && ";
 		}else if(token == OR_T){
 			p2file << "Using Rule 29" << endl;
+			infix = " || ";
 		}else if(token == PLUS_T){
+			infix = " + ";
 			p2file << "Using Rule 37" << endl;
+
 		}else if(token == MULT_T){
+			infix = " * ";
 			p2file << "Using Rule 40" << endl;
 		}else if(token == EQUALTO_T){
+			infix = " == ";
 			p2file << "Using Rule 42" << endl;
 		}else if(token == GT_T){
+			infix = " > ";
 			p2file << "Using Rule 43" << endl;
 		}else if(token == LT_T){
+			infix = " < ";
 			p2file << "Using Rule 44" << endl;
 		}else if(token == GTE_T){
+			infix = " >= ";
 			p2file << "Using Rule 45" << endl;
 		}else if(token == LTE_T){
+			infix = " <= ";
 			p2file << "Using Rule 46" << endl;
 		}else if(token == IDENT_T){
 			p2file << "Using Rule 47" << endl;
@@ -1140,7 +1169,9 @@ int SyntacticalAnalyzer::action(bool isReturned)
 
 		token = lex->GetToken();
 
-		errors += stmt_list();
+		errors += stmt_list(false, infix);
+		codeGen->WriteCode(")");
+
 
 	}else if(token == NEWLINE_T){
 	//type7
