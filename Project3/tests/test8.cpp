@@ -13,14 +13,12 @@ if (listp(ls))
 {
 if (nullp(ls))
 {
-__RetVal = cons ( v), Object ("()")) );
-}
-else
+__RetVal = cons ( v, Object ("()"));
+}else
 {
-__RetVal = cons ( listop ("car", ls), insert_last(listop ("cdr", ls, v)) );
+__RetVal = cons ( listop ("car", ls), insert_last(listop ("cdr", ls), v));
 }
-}
-else
+}else
 {
 __RetVal = Object ("first_argument_of_insert_last_must_be_a_list");
 }
@@ -35,13 +33,11 @@ if (listp(ls))
 if (nullp(ls))
 {
 __RetVal = Object ("()");
-}
-else
+}else
 {
-insert_last(__RetVal = list_reverse(listop ("cdr", ls), listop ("car", ls);
+insert_last(__RetVal = list_reverse(listop ("cdr", ls)), listop ("car", ls));
 }
-}
-else
+}else
 {
 __RetVal = Object ("list_reverse_requires_a_list_argument");
 }
@@ -55,7 +51,7 @@ Object __RetVal;
 cout << list_reverse(Object ("(indentifier numeric literal   cout << 	cout << endl;
   && || !      NULL %  + - / * == > < >= <= anything 1 1.01 "HelloWorld" )")) ;
 cout << endl;
-cout << cons ( Object ("a")), Object ("b")) ) ;
+cout << cons ( Object ("a"), Object ("b")) ;
 cout << endl;
 return 0;
 }

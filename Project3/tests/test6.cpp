@@ -12,41 +12,35 @@ Object __RetVal;
 if (stringp(x))
 {
 __RetVal = Object("Is a string");
-Object ("Is a string")}
-else
+}else
 {
 if (nullp(x))
 {
 __RetVal = Object("Is null");
-Object ("Is null")}
-else
+}else
 {
 if (symbolp(x))
 {
 __RetVal = Object("Is a symbol");
-Object ("Is a symbol")}
-else
+}else
 {
 if (listp(x))
 {
 __RetVal = Object("Is a list");
-Object ("Is a list")}
-else
+}else
 {
 if (zerop(x))
 {
 __RetVal = Object("Is zero");
-Object ("Is zero")}
-else
+}else
 {
 if (numberp(x))
 {
 __RetVal = Object("Is a number");
-Object ("Is a number")}
-else
+}else
 {
 __RetVal = Object("Is a USO");
-Object ("Is a USO")}
+}
 }
 }
 }
@@ -59,9 +53,9 @@ return __RetVal;
 int main()
 {
 Object __RetVal;
-cout << predicates(Object (0)) ;
+cout << predicates(Object(0)) ;
 cout << endl;
-cout << predicates((Object (5) + Object (6)) ;
+cout << predicates((Object(5) + Object(6))) ;
 cout << endl;
 cout << predicates(Object ("hello")) ;
 cout << endl;
@@ -69,7 +63,7 @@ cout << predicates(Object ("(a b c )")) ;
 cout << endl;
 cout << predicates(Object ("()")) ;
 cout << endl;
-cout << predicates(Object ("hello world")) ;
+cout << predicates(Object("hello world")) ;
 cout << endl;
 return 0;
 }

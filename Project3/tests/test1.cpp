@@ -10,15 +10,15 @@ using namespace std;
 int main()
 {
 Object __RetVal;
-cout << Object (1234) ;
+cout << Object(1234) ;
 cout << endl;
-cout << Object (14.5) ;
+cout << Object(14.5) ;
 cout << endl;
 cout << Object ("a") ;
 cout << endl;
 cout << Object ("abc") ;
 cout << endl;
-cout << Object ("Hello World") ;
+cout << Object("Hello World") ;
 cout << endl;
 cout << Object ("(1 23 abc de45 )") ;
 cout << endl;

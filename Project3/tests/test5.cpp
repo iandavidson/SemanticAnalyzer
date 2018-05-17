@@ -9,25 +9,26 @@ using namespace std;
 Object arithmetic1(Object a, Object b, Object c, Object d, Object e)
 {
 Object __RetVal;
-(((a + b + c * (b - d) + ((c * d * e - (a / e))return __RetVal;
+(__RetVal = ((a + b + c) * (b - d)) + ((c * d * e) - (a / e)));
+return __RetVal;
 }
 
 Object square(Object b)
 {
 Object __RetVal;
-(b * breturn __RetVal;
+(__RetVal = b * b);
+return __RetVal;
 }
 
 Object babylonian(Object s, Object x)
 {
 Object __RetVal;
-if (((square(x) - s) < Object (1e-10)))
+if (((square(x) - s) < Object(0.0000000001)))
 {
 __RetVal = Object(x);
-}
-else
+}else
 {
-babylonian(__RetVal = s, ((x + (s / x) / Object (2)));
+babylonian(__RetVal = s, ((x + (s / x)) / Object(2.0)));
 }
 return __RetVal;
 }
@@ -35,13 +36,12 @@ return __RetVal;
 Object sqrt(Object v)
 {
 Object __RetVal;
-if ((v < Object (4)))
+if ((v < Object(4)))
 {
 babylonian(__RetVal = v, v);
-}
-else
+}else
 {
-babylonian(__RetVal = v, (v / Object (2)));
+babylonian(__RetVal = v, (v / Object(2.0)));
 }
 return __RetVal;
 }
@@ -50,19 +50,19 @@ return __RetVal;
 int main()
 {
 Object __RetVal;
-cout << arithmetic1(Object (1), Object (2), Object (4), Object (8), Object (16)) ;
+cout << arithmetic1(Object(1), Object(2), Object(4), Object(8), Object(16)) ;
 cout << endl;
-cout << arithmetic1(Object (1), Object (2), Object (4), Object (8), Object (16)) ;
+cout << arithmetic1(Object(1), Object(2), Object(4), Object(8), Object(16)) ;
 cout << endl;
-cout << square(Object (25)) ;
+cout << square(Object(25)) ;
 cout << endl;
-cout << sqrt(Object (4)) ;
+cout << sqrt(Object(4)) ;
 cout << endl;
-cout << sqrt(Object (25)) ;
+cout << sqrt(Object(25)) ;
 cout << endl;
-cout << sqrt(Object (144)) ;
+cout << sqrt(Object(144)) ;
 cout << endl;
-cout << sqrt(Object (6.25)) ;
+cout << sqrt(Object(6.25)) ;
 cout << endl;
 return 0;
 }

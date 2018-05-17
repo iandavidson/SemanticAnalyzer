@@ -9,15 +9,14 @@ using namespace std;
 Object cond_ex_1(Object choice, Object value)
 {
 Object __RetVal;
-if ((choice == Object (1)value(choice == Object (2)(value * value(choice == Object (3)if ((value == Object (0)))
+if ((choice == Object(1))value(choice == Object(2))(value * value)(choice == Object(3))if ((value == Object(0)))
 {
 __RetVal = Object("Division by 0 not defined");
-Object ("Division by 0 not defined")}
-else
+}else
 {
-__RetVal = (Object (1) / value);
+__RetVal = (Object(1) / value);
 }
-Object (0)))
+Object(0))
 {
 return __RetVal;
 }
@@ -27,8 +26,8 @@ Object square(Object n)
 Object __RetVal;
 if (numberp(n))
 {
-(n * n}
-else
+(__RetVal = n * n);
+}else
 {
 __RetVal = Object ("invalid_parameter");
 }
@@ -38,11 +37,10 @@ return __RetVal;
 Object reciprocal(Object n)
 {
 Object __RetVal;
-if ((numberp(n && !((n == Object (0)))
+if ((numberp(n) && !((n == Object(0)))))
 {
-__RetVal = (Object (1) / n);
-}
-else
+__RetVal = (Object(1) / n);
+}else
 {
 __RetVal = Object ("invalid_parameter");
 }
@@ -52,7 +50,7 @@ return __RetVal;
 Object cond_ex_2(Object choice, Object value)
 {
 Object __RetVal;
-if ((choice == Object (1)value(choice == Object (2)square(value)(choice == Object (3)reciprocal(value)Object (0)))
+if ((choice == Object(1))value(choice == Object(2))square(value)(choice == Object(3))reciprocal(value)Object(0))
 {
 return __RetVal;
 }
@@ -61,37 +59,37 @@ return __RetVal;
 int main()
 {
 Object __RetVal;
-cout << cond_ex_1(Object (1), Object (5)) ;
+cout << cond_ex_1(Object(1), Object(5.0)) ;
 cout << endl;
-cout << cond_ex_1(Object (1), Object (-7)) ;
+cout << cond_ex_1(Object(1), Object(-7.0)) ;
 cout << endl;
-cout << cond_ex_1(Object (2), Object (5)) ;
+cout << cond_ex_1(Object(2), Object(5.0)) ;
 cout << endl;
-cout << cond_ex_1(Object (2), Object (-7)) ;
+cout << cond_ex_1(Object(2), Object(-7.0)) ;
 cout << endl;
-cout << cond_ex_1(Object (3), Object (5)) ;
+cout << cond_ex_1(Object(3), Object(5.0)) ;
 cout << endl;
-cout << cond_ex_1(Object (3), Object (-7)) ;
+cout << cond_ex_1(Object(3), Object(-7.0)) ;
 cout << endl;
-cout << cond_ex_1(Object (3), Object (0)) ;
+cout << cond_ex_1(Object(3), Object(0)) ;
 cout << endl;
-cout << cond_ex_1(Object (-1), Object (5)) ;
+cout << cond_ex_1(Object(-1), Object(5.0)) ;
 cout << endl;
-cout << cond_ex_2(Object (1), Object (5)) ;
+cout << cond_ex_2(Object(1), Object(5.0)) ;
 cout << endl;
-cout << cond_ex_2(Object (1), Object (-7)) ;
+cout << cond_ex_2(Object(1), Object(-7.0)) ;
 cout << endl;
-cout << cond_ex_2(Object (2), Object (5)) ;
+cout << cond_ex_2(Object(2), Object(5.0)) ;
 cout << endl;
-cout << cond_ex_2(Object (2), Object (-7)) ;
+cout << cond_ex_2(Object(2), Object(-7.0)) ;
 cout << endl;
-cout << cond_ex_2(Object (3), Object (5)) ;
+cout << cond_ex_2(Object(3), Object(5.0)) ;
 cout << endl;
-cout << cond_ex_2(Object (3), Object (-7)) ;
+cout << cond_ex_2(Object(3), Object(-7.0)) ;
 cout << endl;
-cout << cond_ex_2(Object (3), Object (0)) ;
+cout << cond_ex_2(Object(3), Object(0)) ;
 cout << endl;
-cout << cond_ex_2(Object (-1), Object (5)) ;
+cout << cond_ex_2(Object(-1), Object(5.0)) ;
 cout << endl;
 return 0;
 }

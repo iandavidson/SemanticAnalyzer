@@ -18,23 +18,44 @@ do
     ./P3.out "$file"
 done
 
-for p3file in ./tests/*.cpp
-do
-    name=${p3file%.*}
-    varx=".x"
-    xname=$name$varx
-    varcpp=".cpp"
-    cppname=$name$varcpp
-    varo=".o"
-    oname=$name$varo
-    g++ "$cppname" Object.cpp Object.h
-    ./tests/a.out
+#rm ./tests/*.dbg
+#rm ./tests/*.p1
+#rm ./tests/*.p2
+#rm ./tests/*.lst
 
+./tests/makefile
 
+echo "test1:"
+./tests/test1.x
+echo
 
+echo "test2:"
+./tests/test2.x
+echo
 
-done
+echo "test3:"
+./tests/test3.x
+echo
 
+echo "test4:"
+./tests/test4.x
+echo
+
+echo "test5:"
+./tests/test5.x
+echo
+
+echo "test6:"
+./tests/test6.x
+echo
+
+echo "test7:"
+./tests/test7.x
+echo
+
+echo "test8:"
+./tests/test8.x
+echo
 
 echo "shizenburger"
 

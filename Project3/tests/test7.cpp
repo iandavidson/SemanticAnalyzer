@@ -9,23 +9,20 @@ using namespace std;
 Object iftest(Object a, Object b, Object c)
 {
 Object __RetVal;
-if (((a == b && (b == c))
+if (((a == b) && (b == c)))
 {
 __RetVal = Object ("all_the_same");
-}
-else
+}else
 {
-if (!(((a > b || (b > c))
+if (!(((a > b) || (b > c))))
 {
 __RetVal = Object ("in_ascending_order");
-}
-else
+}else
 {
-if (!((a < c))
+if (!((a < c)))
 {
 __RetVal = Object ("in_decscending_order");
-}
-else
+}else
 {
 __RetVal = Object ("three_values_passed");
 }
@@ -38,13 +35,13 @@ return __RetVal;
 int main()
 {
 Object __RetVal;
-cout << iftest(Object (10), Object (15), Object (20)) ;
+cout << iftest(Object(10), Object(15), Object(20)) ;
 cout << endl;
-cout << iftest(Object (10), Object (10), Object (10)) ;
+cout << iftest(Object(10), Object(10), Object(10)) ;
 cout << endl;
-cout << iftest(Object (20), Object (15), Object (10)) ;
+cout << iftest(Object(20), Object(15), Object(10)) ;
 cout << endl;
-cout << iftest(Object (15), Object (10), Object (20)) ;
+cout << iftest(Object(15), Object(10), Object(20)) ;
 cout << endl;
 return 0;
 }

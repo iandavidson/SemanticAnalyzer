@@ -10,15 +10,15 @@ using namespace std;
 int main()
 {
 Object __RetVal;
-cout << ((Object (1.2) * (Object (2) - (Object (1) / Object (3.1))) + Object (-8.7) ;
+cout << ((Object(1.2) * (Object(2) - (Object(1) / Object(3.1)))) + Object(-8.7)) ;
 cout << endl;
-cout << (((Object (2) / Object (3.2)) + (Object (2.3) / Object (9)) / ((Object (5) / Object (1.4)) - (Object (2) / Object (3.5)))) ;
+cout << (((Object(2) / Object(3.2)) + (Object(2.3) / Object(9))) / ((Object(5) / Object(1.4)) - (Object(2) / Object(3.5)))) ;
 cout << endl;
-cout << (Object (1) + (Object (1) / (Object (2) + (Object (1) / (Object (1) + (Object (1) / Object (2.6)))) ;
+cout << (Object(1) + (Object(1) / (Object(2) + (Object(1) / (Object(1) + (Object(1) / Object(2.6))))))) ;
 cout << endl;
-cout << (Object (1) * Object (-2) * Object (3) * Object (-2) * Object (5) * Object (-6) * Object (7) ;
+cout << (Object(1) * Object(-2) * Object(3) * Object(-2) * Object(5) * Object(-6) * Object(7)) ;
 cout << endl;
-cout << ((Object (10) % Object (3)) * (Object (3) % Object (7)) ;
+cout << ((Object(10) % Object(3)) * (Object(3) % Object(7))) ;
 cout << endl;
 return 0;
 }
